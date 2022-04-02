@@ -4,7 +4,7 @@
  * Project:		JHotdraw - a GUI framework for technical drawings
  *				http://www.jhotdraw.org
  *				http://jhotdraw.sourceforge.net
- * Copyright:	© by the original author(s) and all contributors
+ * Copyright:	ï¿½ by the original author(s) and all contributors
  * License:		Lesser GNU Public License (LGPL)
  *				http://www.opensource.org/licenses/lgpl-license.html
  */
@@ -227,7 +227,8 @@ public abstract class AttributeFigure extends AbstractFigure {
 	public void read(StorableInput dr) throws IOException {
 		super.read(dr);
 		String s = dr.readString();
-		if (s.toLowerCase().equals("attributes")) {
+		if("attributes".equals(s.toLowerCase())) {
+//		if (s.toLowerCase().equals("attributes")) {
 			fAttributes = new FigureAttributes();
 			fAttributes.read(dr);
 		}
