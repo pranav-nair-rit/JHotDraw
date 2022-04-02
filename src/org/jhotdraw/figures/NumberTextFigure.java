@@ -4,7 +4,7 @@
  * Project:		JHotdraw - a GUI framework for technical drawings
  *				http://www.jhotdraw.org
  *				http://jhotdraw.sourceforge.net
- * Copyright:	© by the original author(s) and all contributors
+ * Copyright:	ï¿½ by the original author(s) and all contributors
  * License:		Lesser GNU Public License (LGPL)
  *				http://www.opensource.org/licenses/lgpl-license.html
  */
@@ -31,7 +31,9 @@ public  class NumberTextFigure extends TextFigure {
 	 * @see org.jhotdraw.util.FloatingTextField
 	 */
 	public int overlayColumns() {
-		return Math.max(4, getText().length());
+		int temp =getText().length();
+		int ans = Math.max(4, temp);
+		return ans;
 	}
 
 	/**
