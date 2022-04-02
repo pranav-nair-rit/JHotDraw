@@ -183,10 +183,10 @@ public abstract class AttributeFigure extends AbstractFigure {
 	}
 
 	public Object getAttribute(FigureAttributeConstant attributeConstant) {
-		if (fAttributes != null) {
-			if (fAttributes.hasDefined(attributeConstant)) {
+		if (fAttributes != null && fAttributes.hasDefined(attributeConstant)) {
+//			if (fAttributes.hasDefined(attributeConstant)) {
 				return fAttributes.get(attributeConstant);
-			}
+//			}
 		}
 		return getDefaultAttribute(attributeConstant);
 	}
