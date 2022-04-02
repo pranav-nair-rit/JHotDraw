@@ -4,7 +4,7 @@
  * Project:		JHotdraw - a GUI framework for technical drawings
  *				http://www.jhotdraw.org
  *				http://jhotdraw.sourceforge.net
- * Copyright:	© by the original author(s) and all contributors
+ * Copyright:	ï¿½ by the original author(s) and all contributors
  * License:		Lesser GNU Public License (LGPL)
  *				http://www.opensource.org/licenses/lgpl-license.html
  */
@@ -244,14 +244,17 @@ public class TextTool extends CreationTool {
 		 * @return true if the activity could be undone, false otherwise
 		 */
 		public boolean undo() {
+			boolean ans;
 			if (!super.undo()) {
-				return false;
+				ans = false;
+			}else {
+				ans = true;
 			}
 
 			getDrawingView().clearSelection();
 			setText(getOriginalText());
 
-			return true;
+			return ans;
 		}
 
 		/*
