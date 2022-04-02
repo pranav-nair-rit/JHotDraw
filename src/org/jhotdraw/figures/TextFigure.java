@@ -4,7 +4,7 @@
  * Project:		JHotdraw - a GUI framework for technical drawings
  *				http://www.jhotdraw.org
  *				http://jhotdraw.sourceforge.net
- * Copyright:	© by the original author(s) and all contributors
+ * Copyright:	ï¿½ by the original author(s) and all contributors
  * License:		Lesser GNU Public License (LGPL)
  *				http://www.opensource.org/licenses/lgpl-license.html
  */
@@ -33,13 +33,9 @@ public class TextFigure
 	extends AttributeFigure
 	implements FigureChangeListener, TextHolder {
 
+	private TextFigureProduct textFigureProduct = new TextFigureProduct();
 	private int fOriginX;
 	private int fOriginY;
-
-	// cache of the TextFigure's size
-	transient private boolean fSizeIsDirty = true;
-	transient private int fWidth;
-	transient private int fHeight;
 
 	private String fText;
 	private Font fFont;
@@ -56,7 +52,7 @@ public class TextFigure
 	 * Serialization support.
 	 */
 	private static final long serialVersionUID = 4599820785949456124L;
-	private int textFigureSerializedDataVersion = 1;
+//	private int textFigureSerializedDataVersion = 1;
 
 	public TextFigure() {
 		fOriginX = 0;
@@ -64,7 +60,7 @@ public class TextFigure
 		fFont = createCurrentFont();
 		setAttribute(FigureAttributeConstant.FILL_COLOR, ColorMap.color("None"));
 		fText = "";
-		fSizeIsDirty = true;
+		textFigureProduct.setFSizeIsDirty(true);
 	}
 
 	/**
@@ -96,7 +92,7 @@ public class TextFigure
 	 * @see org.jhotdraw.framework.Figure#displayBox()
 	 */
 	public Rectangle displayBox() {
-		Dimension extent = textExtent();
+		Dimension extent = textFigureProduct.textExtent(this.fFont, this.fText);
 		return new Rectangle(fOriginX, fOriginY, extent.width, extent.height);
 	}
 
@@ -148,7 +144,7 @@ public class TextFigure
 	public void setFont(Font newFont) {
 		willChange();
 		fFont = newFont;
-		markDirty();
+		textFigureProduct.markDirty();
 		changed();
 	}
 
@@ -180,7 +176,7 @@ public class TextFigure
 	public Object getAttribute(FigureAttributeConstant attributeConstant) {
 		Font font = getFont();
 		if (attributeConstant.equals(FigureAttributeConstant.FONT_SIZE)) {
-			return new Integer(font.getSize());
+		return new Integer.valueOf(font.getSize());
 		}
 		if (attributeConstant.equals(FigureAttributeConstant.FONT_STYLE)) {
 			return new Integer(font.getStyle());
@@ -249,7 +245,7 @@ public class TextFigure
 		if (newText == null || !newText.equals(fText)) {
 			willChange();
 			fText = newText;
-			markDirty();
+			textFigureProduct.markDirty();
 			changed();
 		}
 	}
@@ -282,18 +278,11 @@ public class TextFigure
 	}
 
 	protected Dimension textExtent() {
-		if (!fSizeIsDirty) {
-			return new Dimension(fWidth, fHeight);
-		}
-		FontMetrics metrics = Toolkit.getDefaultToolkit().getFontMetrics(fFont);
-		fWidth = metrics.stringWidth(getText());
-		fHeight = metrics.getHeight();
-		fSizeIsDirty = false;
-		return new Dimension(fWidth, fHeight);
+		return textFigureProduct.textExtent(this.fFont, this.fText);
 	}
 
 	protected void markDirty() {
-		fSizeIsDirty = true;
+		textFigureProduct.markDirty();
 	}
 
 	/**
@@ -343,7 +332,7 @@ public class TextFigure
 	 */
 	public void read(StorableInput dr) throws IOException {
 		super.read(dr);
-		markDirty();
+		textFigureProduct.markDirty();
 		basicDisplayBox(new Point(dr.readInt(), dr.readInt()), null);
 		setText(dr.readString());
 		fFont = new Font(dr.readString(), dr.readInt(), dr.readInt());
@@ -362,7 +351,7 @@ public class TextFigure
 		if (getObservedFigure() != null) {
 			getObservedFigure().addFigureChangeListener(this);
 		}
-		markDirty();
+		textFigureProduct.markDirty();
 	}
 
 	/**
@@ -505,5 +494,11 @@ public class TextFigure
 	 */
 	static public void setCurrentFontStyle(int style) {
 		fgCurrentFontStyle = style;
+	}
+
+	public Object clone() {
+		TextFigure clone = (TextFigure) super.clone();
+		clone.textFigureProduct = (TextFigureProduct) this.textFigureProduct.clone();
+		return clone;
 	}
 }
